@@ -86,6 +86,10 @@ class NodeRegistry{
                 $newNode = new $nodeName($left, $right);
                 return $newNode;
             }else{
+                if ("*" === $array){
+                    return $this->randomVariableNode();
+                }
+
                 $rand = rand(0, 10) / 10;
                 if ($rand < $prVariableNode){
                     try{

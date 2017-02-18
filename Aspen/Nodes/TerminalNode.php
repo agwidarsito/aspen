@@ -24,4 +24,8 @@ abstract class TerminalNode extends AbstractNode {
         ;
     }
 
+    public function expression(){
+        return $this->name();
+    }
+
 }

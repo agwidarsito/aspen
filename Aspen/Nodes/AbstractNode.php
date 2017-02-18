@@ -16,6 +16,10 @@ abstract class AbstractNode{
 
     abstract public function draw();
 
+    abstract public function symbol();
+
+    abstract public function expression();
+
     abstract public function children();
 
     abstract public function recursiveReplace($needle, $replacement);

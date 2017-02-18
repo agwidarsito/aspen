@@ -13,9 +13,9 @@ use Nodes\TerminalNode;
  */
 class Mutator{
 
-    public $prBinaryNode = 0.2;
+    public $prBinaryNode = 0.3;
     public $prRandomVariableNode = 0.5;
-    public $prChangeConstantValue = 0.2;
+    public $prChangeConstantValue = 0.4;
 
     private $nodeRegistry;
 
@@ -50,8 +50,16 @@ class Mutator{
         $randomChild = $copyNode->randomChild();
         if ($randomChild instanceof ConstantNode){
              if ($this->diceRoll() < $this->prChangeConstantValue){
-                 $randomChild->updateValue($randomChild->value() + rand(0, 10));
+                 $randomChild->updateValue($randomChild->value() + rand(0, 10) / 10);
              }
+
+            if ($this->diceRoll() < $this->prChangeConstantValue){
+                $randomChild->updateValue($randomChild->value() + rand(0, 10) / 100);
+            }
+
+            if ($this->diceRoll() < $this->prChangeConstantValue){
+                $randomChild->updateValue($randomChild->value() + rand(0, 10) / 1000);
+            }
         }
 
         return $copyNode;

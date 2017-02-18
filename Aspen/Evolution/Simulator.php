@@ -47,7 +47,7 @@ class Simulator{
                 /** @var $aSolution AbstractNode */
                 $f = $this->fitnessFunction;
                 $rank = $f($aSolution);
-                $ranks[] = ["Rank" => $rank, "Draw" => $aSolution->draw(), "Tree" => $aSolution];
+                $ranks[] = ["Rank" => $rank, "Draw" => $aSolution->expression(), "Tree" => $aSolution];
             }
 
             usort($ranks, function($a, $b){
@@ -75,14 +75,22 @@ class Simulator{
             foreach($previousGeneration as $aPrevious){
                 /** @var $aPrevious AbstractNode */
                 if ($stopCriteria($aPrevious)){
-                    echo "Done with tree: " . $aPrevious->draw() . " = " . $aPrevious->evaluate($lookupTable);
+
+                    $f = $this->fitnessFunction;
+                    $rank = $f($aPrevious);
+
+                    echo "\n\nDone with tree: " . $aPrevious->expression() . " with fitness " . $rank;
+                    file_put_contents("tree.txt", $aPrevious->expression());
                     die();
                 }
             }
 
-            echo "Top fitness for generation $x: " . $ranks[0]["Rank"] . PHP_EOL;
-            if ($x === $maxSteps){
-                throw new \Exception("We didn't find anything :(");
+            if (0 === $x % 100){
+                echo "Top fitness for generation $x: " . $ranks[0]["Rank"] . PHP_EOL;
+            }
+
+            if ($x === $maxSteps - 1){
+                echo "We didn't find anything but " . $ranks[0]["Draw"];
             }
         }
     }

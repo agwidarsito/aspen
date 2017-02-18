@@ -8,6 +8,10 @@ namespace Nodes;
  */
 class DivisionNode extends BinaryNode  {
 
+    public function symbol(){
+        return "/";
+    }
+
     public function evaluate($lookupTable){
         if ($this->right->evaluate($lookupTable) < 0.0001){
             return 0;

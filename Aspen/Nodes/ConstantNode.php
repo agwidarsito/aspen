@@ -10,6 +10,10 @@ class ConstantNode extends TerminalNode  {
 
     private $value;
 
+    public function symbol(){
+        return $this->value();
+    }
+
     public function __construct($value){
         $this->value = $value;
     }

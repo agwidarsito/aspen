@@ -10,6 +10,10 @@ class VariableNode extends TerminalNode  {
 
     protected $name;
 
+    public function symbol(){
+        return $this->name();
+    }
+
     public function __construct($name){
         $this->name = $name;
     }

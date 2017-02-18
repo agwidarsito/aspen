@@ -32,6 +32,10 @@ abstract class BinaryNode extends AbstractNode {
         return array_merge($leftChildren, $rightChildren, [&$this->left, &$this->right]);
     }
 
+    public function expression(){
+        return "(" . $this->left->expression() . $this->symbol() . $this->right->expression() . ")";
+    }
+
     public function recursiveReplace($needle, $replacement){
         if ($this->left === $needle){
             $this->left = $replacement;
