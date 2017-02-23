@@ -13,9 +13,9 @@ use Nodes\TerminalNode;
  */
 class Mutator{
 
-    public $prBinaryNode = 0.3;
-    public $prRandomVariableNode = 0.5;
-    public $prChangeConstantValue = 0.4;
+    public $prBinaryNode = 0.4;
+    public $prRandomVariableNode = 0.3;
+    public $prChangeConstantValue = 0.5;
 
     private $nodeRegistry;
 
@@ -73,7 +73,7 @@ class Mutator{
     public function crossOver(AbstractNode $left, AbstractNode $right){
         $copyOfLeft = $left->deepCopy();
 
-        $randomSubTree = $right->randomChild();
+        $randomSubTree = $right->randomChild()->deepCopy();
         $randomInsertionPoint = $copyOfLeft->randomChild();
 
         $copyOfLeft->recursiveReplace($randomInsertionPoint, $randomSubTree);

@@ -9,11 +9,11 @@ $mutator = new \Evolution\Mutator($nodeRegistry);
 
 $simulator = new \Evolution\Simulator($nodeRegistry, $mutator);
 
-$initialMembers = 5;
+$initialMembers = 50;
 for($i = 0; $i < $initialMembers; $i++){
     $simulator->addFirstGenerationMember([1,[1,"*"]]);
     $simulator->addFirstGenerationMember([1,"*"]);
-    $simulator->addFirstGenerationMember([1,[1,[1,"*"]]]);
+    $simulator->addFirstGenerationMember([1,["*",[1,"*"]]]);
 }
 
 $valueOfX = 0;
@@ -29,7 +29,7 @@ $simulator->setFitnessFunction(function(\Nodes\AbstractNode $abstractNode) use (
         $difference += abs($abstractNode->evaluate($lookupTable) - $realValue);
     }
 
-    if ($abstractNode->depth() > 30){
+    if ($abstractNode->depth() > 20){
         $difference += 1000;
     }
 
@@ -47,11 +47,11 @@ $stopCriteria = function(\Nodes\AbstractNode $abstractNode) use ($lookupTable, &
         $difference += abs($abstractNode->evaluate($lookupTable) - $realValue);
     }
 
-    if ($abstractNode->depth() > 30){
+    if ($abstractNode->depth() > 20){
         $difference += 1000;
     }
 
-    return ($difference < 2);
+    return ($difference < 1 && 0 !== $difference);
 };
 
-$simulator->simulate(5000, $lookupTable, $stopCriteria);
+$simulator->simulate(100, $lookupTable, $stopCriteria);

@@ -7,6 +7,7 @@ use Nodes\AdditionNode;
 use Nodes\ConstantNode;
 use Nodes\DivisionNode;
 use Nodes\MultiplicationNode;
+use Nodes\SinNode;
 use Nodes\SubtractionNode;
 use Nodes\VariableNode;
 
@@ -23,6 +24,10 @@ class NodeRegistry{
         SubtractionNode::class,
         MultiplicationNode::class,
         DivisionNode::class
+    );
+
+    private $unaryNodes = array(
+        SinNode::class
     );
 
     public function addVariableNode($name){
@@ -91,14 +96,18 @@ class NodeRegistry{
                 }
 
                 $rand = rand(0, 10) / 10;
-                if ($rand < $prVariableNode){
-                    try{
+                if ($rand < $prVariableNode / 2) {
+                    try {
                         return $this->randomVariableNode();
-                    }catch(\Exception $e){
+                    } catch (\Exception $e) {
                         /** If no variable nodes exist */
                         return $this->randomConstantNode();
                     }
                 }
+//                }else if ($rand < $prVariableNode){
+//                    $randomUnaryNode = $this->unaryNodes[array_rand($this->unaryNodes, 1)];
+//                    return new $randomUnaryNode($this->randomVariableNode());
+//                }
                 return $this->randomConstantNode();
             }
         };

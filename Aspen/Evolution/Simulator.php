@@ -54,22 +54,34 @@ class Simulator{
                 return $a["Rank"] > $b["Rank"];
             });
 
-            $top50 = [];
-            $mutatorSet = [];
-            for($i = 0; $i < ceil(count($ranks) / 2); $i++){
-                $top50[] = $ranks[$i]["Tree"];
-                $mutatorSet[] = $ranks[$i]["Tree"];
+
+            $totalRank = 0;
+            for($i = 0; $i < count($ranks); $i++){
+                $totalRank += $ranks[$i]["Rank"];
             }
+
+            /** Roulette selection */
+            $pick = function() use ($totalRank, $ranks){
+                $rand = rand() * $totalRank;
+                $counter = $totalRank;
+                for($i = 0; $i < count($ranks); $i++){
+                    $counter -= $ranks[$i]["Rank"];
+                    if ($counter < $rand){
+                        return $ranks[$i]["Tree"];
+                    }
+                }
+                return $ranks[count($ranks) - 1]["Tree"];
+            };
 
 
             $mutants = [];
-            for($i = 0; $i < ceil(count($mutatorSet) / 2); $i++){
-                $randomLeft = $mutatorSet[array_rand($mutatorSet, 1)];
-                $randomRight = $mutatorSet[array_rand($mutatorSet, 1)];
+            for($j = 0; $j < count($ranks); $j++){
+                $randomLeft = $pick();
+                $randomRight = $pick();
                 $mutants[] = $this->mutator->crossOver($randomLeft, $randomRight)["Child"];
             }
 
-            $previousGeneration = array_merge($mutants, $top50);
+            $previousGeneration = array_merge($mutants, [$ranks[0]["Tree"]]);
 
             /** Do we need to bail? */
             foreach($previousGeneration as $aPrevious){
@@ -85,8 +97,9 @@ class Simulator{
                 }
             }
 
-            if (0 === $x % 100){
-                echo "Top fitness for generation $x: " . $ranks[0]["Rank"] . PHP_EOL;
+            if (0 === $x % 1){
+                echo "Top fitness for generation $x: " . $ranks[0]["Rank"]. " with " .
+                    $ranks[0]["Draw"] . PHP_EOL;
             }
 
             if ($x === $maxSteps - 1){
